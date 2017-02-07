@@ -9,12 +9,52 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="surl" elementType="Argument">
             <stringProp name="Argument.name">surl</stringProp>
+            <stringProp name="Argument.value">$(__P(surl, 172.17.9.105))</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="flashver" elementType="Argument">
+            <stringProp name="Argument.name">flashver</stringProp>
+            <stringProp name="Argument.value">WIN 24,0,0,194</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="swfurl" elementType="Argument">
+            <stringProp name="Argument.name">swfurl</stringProp>
             <stringProp name="Argument.value"></stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="init_success" elementType="Argument">
-            <stringProp name="Argument.name">init_success</stringProp>
-            <stringProp name="Argument.value">false</stringProp>
+          <elementProp name="tcurl" elementType="Argument">
+            <stringProp name="Argument.name">tcurl</stringProp>
+            <stringProp name="Argument.value">http://172.17.9.105/vod</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="capabilities" elementType="Argument">
+            <stringProp name="Argument.name">capabilities</stringProp>
+            <stringProp name="Argument.value">239</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="audiocodecs" elementType="Argument">
+            <stringProp name="Argument.name">audiocodecs</stringProp>
+            <stringProp name="Argument.value">3575</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="videocodecs" elementType="Argument">
+            <stringProp name="Argument.name">videocodecs</stringProp>
+            <stringProp name="Argument.value">252</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="pageurl" elementType="Argument">
+            <stringProp name="Argument.name">pageurl</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="windowacksize" elementType="Argument">
+            <stringProp name="Argument.name">windowacksize</stringProp>
+            <stringProp name="Argument.value">25000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="filename" elementType="Argument">
+            <stringProp name="Argument.name">filename</stringProp>
+            <stringProp name="Argument.value">$(__P(mp4:BigBuckBunny.mkv))</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -89,16 +129,18 @@
           <stringProp name="TestPlan.comments">Connection is initiated</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - response validation" enabled="true">
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters"></stringProp>
-            <boolProp name="resetInterpreter">false</boolProp>
-            <stringProp name="script"></stringProp>
-          </BeanShellPostProcessor>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="51512">404</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">true</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+          </ResponseAssertion>
           <hashTree/>
         </hashTree>
         <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If init successful" enabled="true">
-          <stringProp name="IfController.condition">${init_success} == &quot;true&quot;</stringProp>
+          <stringProp name="IfController.condition">${JMeterThread.last_sample_ok} == true</stringProp>
           <boolProp name="IfController.evaluateAll">false</boolProp>
         </IfController>
         <hashTree>
@@ -127,22 +169,14 @@
               <stringProp name="RegexExtractor.refname">connection_id</stringProp>
               <stringProp name="RegexExtractor.regex">(.+?)</stringProp>
               <stringProp name="RegexExtractor.template">$1$</stringProp>
-              <stringProp name="RegexExtractor.default">&quot;not_set&quot;</stringProp>
+              <stringProp name="RegexExtractor.default"></stringProp>
               <stringProp name="RegexExtractor.match_number">1</stringProp>
+              <boolProp name="RegexExtractor.default_empty_value">true</boolProp>
             </RegexExtractor>
-            <hashTree/>
-            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-              <collectionProp name="HeaderManager.headers">
-                <elementProp name="" elementType="Header">
-                  <stringProp name="Header.name">Content-Length</stringProp>
-                  <stringProp name="Header.value">1</stringProp>
-                </elementProp>
-              </collectionProp>
-            </HeaderManager>
             <hashTree/>
           </hashTree>
           <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If connection is opened" enabled="true">
-            <stringProp name="IfController.condition">${connection_id} != &quot;not_set&quot;</stringProp>
+            <stringProp name="IfController.condition">${connection_id} is not NULL</stringProp>
             <boolProp name="IfController.evaluateAll">false</boolProp>
           </IfController>
           <hashTree>
@@ -165,29 +199,14 @@
               <boolProp name="HTTPSampler.monitor">false</boolProp>
               <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
             </HTTPSamplerProxy>
-            <hashTree>
-              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor- add AMF command" enabled="true">
-                <stringProp name="filename"></stringProp>
-                <stringProp name="parameters"></stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="script"></stringProp>
-              </BeanShellPreProcessor>
-              <hashTree/>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - extract polling delay" enabled="true">
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
+            <hashTree/>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - negotiation data 1" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="" elementType="HTTPArgument">
                     <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value"></stringProp>
+                    <stringProp name="Argument.value">1</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -208,20 +227,32 @@
               <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
             </HTTPSamplerProxy>
             <hashTree>
-              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor - request to set up connection parameters" enabled="true">
+              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor - request to start handshake process" enabled="true">
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
+                <stringProp name="script">import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.protocol.http.Sampler.HTTPSamplerProxy;
+import org.apache.jmeter.samplers.SampleResult;
+import org.apache.jmeter.config.Arguments;
+import org.apache.jmeter.config.Argument;
+import java.util.*;
+
+Random rand = new Random(3);
+
+byte[] bb = new byte[1537];
+
+bb[0] = 0x03;
+for(int i0=5;i0&lt;1537;i0++)
+	bb[i0] = rand.nextBytes(bb);
+
+String sb = new String(bb);
+
+sampler.getArguments().getArgument(0).setValue(sb);
+
+
+</stringProp>
               </BeanShellPreProcessor>
-              <hashTree/>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - confirmation from the server" enabled="true">
-                <stringProp name="TestPlan.comments">Server is ready for handshaking</stringProp>
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
-              </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - negotiation data 2" enabled="true">
@@ -248,49 +279,67 @@
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
+                <stringProp name="script">import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.protocol.http.Sampler.HTTPSamplerProxy;
+import org.apache.jmeter.samplers.SampleResult;
+import jp.develop.common.util.AmfUtil;
+import org.java.util.*;
+
+	SampleResult sR = ctx.getPreviousResult();
+	byte[] body_bytes = sR.getResponseData();
+
+     TreeMap&lt;String,Object&gt; serverOptions = new TreeMap&lt;String,Object&gt;();
+     serverOptions.put(&quot;connect&quot;,1072693248);
+     TreeMap&lt;String,Object&gt; connectionParameters = new TreeMap&lt;String, Object&gt;();
+     connectionParameters.put(&quot;app&quot;,${vod});
+     connectionParameters.put(&quot;flashVer&quot;,${flashver});
+     connectionParameters.put(&quot;swfUrl&quot;,${swfurl});
+     connectionParameters.put(&quot;tcUrl&quot;,${tcurl});
+     connectionParameters.put(&quot;fpad&quot;,(byte)0);
+     connectionParameters.put(&quot;capabilities&quot;,${capabilities});
+     connectionParameters.put(&quot;audioCodecs&quot;,${audiocodecs});
+     connectionParameters.put(&quot;videoCodecs&quot;,${videocodecs});
+     connectionParameters.put(&quot;pageUrl&quot;,${pageurl});
+     connectionParameters.put(&quot;objectEncoding&quot;,0);
+     serverOptions.put(&quot;Object&quot;,connectionParameters);
+
+     byte[] amf3 = AmfUtil.encode(serverOptions);
+     byte[] rtmptamf3 = new byte[(1537+10+amf3.length)];
+
+     for(int i0=0;i0&lt;1548;i0++){
+     	if (i0&lt;1537){
+         		rtmptamf3[i0] = body_bytes[1537+i0];}
+     	else{
+     		rtmptamf3[i0] = 0;}
+     }
+     rtmptamf3[1537] = 0x3;
+     rtmptamf3[1540] = 1;
+     rtmptamf3[1542] = 0x58;
+     rtmptamf3[1543] = 1;
+     rtmptamf3[1544] = 0x14;
+     
+     for(int i0=0;i0&lt;amf3.length;i0++)
+         rtmptamf3[i0+1547] = amf3[i0];
+
+	String sb = new String(rtmptamf3);
+	sample.getArguments().getArgument(0).setValue(sb);</stringProp>
               </BeanShellPreProcessor>
               <hashTree/>
               <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - parse for connect response" enabled="true">
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
-              </BeanShellPostProcessor>
-              <hashTree/>
-            </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - negotiation data 2" enabled="true">
-              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-                <collectionProp name="Arguments.arguments"/>
-              </elementProp>
-              <stringProp name="HTTPSampler.domain"></stringProp>
-              <stringProp name="HTTPSampler.port"></stringProp>
-              <stringProp name="HTTPSampler.connect_timeout"></stringProp>
-              <stringProp name="HTTPSampler.response_timeout"></stringProp>
-              <stringProp name="HTTPSampler.protocol"></stringProp>
-              <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-              <stringProp name="HTTPSampler.path">/send/${connection_id}/2</stringProp>
-              <stringProp name="HTTPSampler.method">GET</stringProp>
-              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-              <boolProp name="HTTPSampler.monitor">false</boolProp>
-              <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
-            </HTTPSamplerProxy>
-            <hashTree>
-              <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="BeanShell PreProcessor - request connection parameters" enabled="true">
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
-              </BeanShellPreProcessor>
-              <hashTree/>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - parse connection parameters" enabled="true">
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
+                <stringProp name="script">import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.protocol.http.Sampler.HTTPSamplerProxy;
+import org.apache.jmeter.samplers.SampleResult;
+import jp.develop.common.util.AmfUtil;
+import org.java.util.*;
+
+	SampleResult sR = ctx.getPreviousResult();
+	byte[] body_bytes = sR.getResponseData();
+
+ 	//--------------------------------------------
+	</stringProp>
               </BeanShellPostProcessor>
               <hashTree/>
             </hashTree>
@@ -318,15 +367,32 @@
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
+                <stringProp name="script">import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.protocol.http.Sampler.HTTPSamplerProxy;
+import org.apache.jmeter.samplers.SampleResult;
+import jp.develop.common.util.AmfUtil;
+import org.java.util.*;
+
+	SampleResult sR = ctx.getPreviousResult();
+	byte[] body_bytes = sR.getResponseData();
+
+	byte[] winacksize = new byte[16];
+
+	for(int i0=0;i0&lt;16;i0++)
+		winacksize[i0] = body_bytes[i0];
+
+	String sb = new String(winacksize);
+	sample.getArguments().getArgument(0).setValue(sb);</stringProp>
               </BeanShellPreProcessor>
               <hashTree/>
-              <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - parse response" enabled="true">
-                <boolProp name="resetInterpreter">false</boolProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
-              </BeanShellPostProcessor>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="49586">200</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">8</intProp>
+              </ResponseAssertion>
               <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - negotiation data 4" enabled="true">
@@ -353,7 +419,42 @@
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
+                <stringProp name="script">import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.protocol.http.Sampler.HTTPSamplerProxy;
+import org.apache.jmeter.samplers.SampleResult;
+import jp.develop.common.util.AmfUtil;
+import org.java.util.*;
+
+	SampleResult sR = ctx.getPreviousResult();
+	byte[] body_bytes = sR.getResponseData();
+
+     TreeMap&lt;String,Object&gt; serverOptions = new TreeMap&lt;String,Object&gt;();
+     serverOptions.put(&quot;createStream&quot;,${streamid});
+     byte[] amf3 = AmfUtil.encode(serverOptions);
+
+    	byte[] rtmptamf3 = new byte[25+amf3.length];
+
+     for(int i0=0;i0&lt;(25+amf3.length);i0++){
+		if(i0&lt;25){
+			rtmptamf3=0;
+		}
+		else{
+	         rtmptamf3[i0] = amf3[i0];
+		}
+	rtmptamf3[0]=0x42;
+	rtmptamf3[6]=0x0a;
+	rtmptamf3[7]=0x04;
+	rtmptamf3[9]=0x03;
+	rtmptamf3[16]=0x0b;
+	rtmptamf3[17]=0xb8;
+	rtmptamf3[18]=0x43;
+	rtmptamf3[20]=0x0a;
+	rtmptamf3[21]=0x8a;
+	rtmptamf3[23]=0x19;
+     rtmptamf3[24]=0x14;
+
+	String sb = new String(rtmptamf3);
+	sample.getArguments().getArgument(0).setValue(sb);     </stringProp>
               </BeanShellPreProcessor>
               <hashTree/>
               <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - parse response" enabled="true">
@@ -388,7 +489,34 @@
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script"></stringProp>
+                <stringProp name="script">import org.apache.jmeter.threads.JMeterContext;
+import org.apache.jmeter.protocol.http.Sampler.HTTPSamplerProxy;
+import org.apache.jmeter.samplers.SampleResult;
+import jp.develop.common.util.AmfUtil;
+import org.java.util.*;
+
+     TreeMap&lt;String,Object&gt; serverOptions = new TreeMap&lt;String,Object&gt;();
+     serverOptions.put(&quot;play&quot;,${filename});
+     byte[] amf3 = AmfUtil.encode(serverOptions);
+
+    	byte[] rtmptamf3 = new byte[12+amf3.length];
+
+     for(int i0=0;i0&lt;(12+amf3.length);i0++){
+		if(i0&lt;12){
+			rtmptamf3=0;
+		}
+		else{
+	         rtmptamf3[i0] = amf3[i0];
+		}
+	rtmptamf3[0]=0x08;
+	rtmptamf3[2]=0x0a;
+	rtmptamf3[3]=0x8c;
+	rtmptamf3[6]=0x2d;
+	rtmptamf3[7]=0x14;
+	rtmptamf3[8]=0x01;
+
+	String sb = new String(rtmptamf3);
+	sample.getArguments().getArgument(0).setValue(sb);</stringProp>
               </BeanShellPreProcessor>
               <hashTree/>
               <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - parse streamed data." enabled="true">
@@ -400,10 +528,19 @@
               <hashTree/>
             </hashTree>
             <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-              <stringProp name="WhileController.condition">${end_of_stream} == 1</stringProp>
+              <stringProp name="WhileController.condition">${JMeterThread.last_sample_ok} == true</stringProp>
             </WhileController>
             <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - negotiation data 6" enabled="true">
+              <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter of chunks" enabled="true">
+                <stringProp name="CounterConfig.start">6</stringProp>
+                <stringProp name="CounterConfig.end"></stringProp>
+                <stringProp name="CounterConfig.incr">1</stringProp>
+                <stringProp name="CounterConfig.name">chunkCount</stringProp>
+                <stringProp name="CounterConfig.format"></stringProp>
+                <boolProp name="CounterConfig.per_user">false</boolProp>
+              </CounterConfig>
+              <hashTree/>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request - negotiation data" enabled="true">
                 <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
                   <collectionProp name="Arguments.arguments"/>
                 </elementProp>
@@ -413,7 +550,7 @@
                 <stringProp name="HTTPSampler.response_timeout"></stringProp>
                 <stringProp name="HTTPSampler.protocol"></stringProp>
                 <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-                <stringProp name="HTTPSampler.path">/idle/${connection_id}/6</stringProp>
+                <stringProp name="HTTPSampler.path">/idle/${connection_id}/${chunkCount}</stringProp>
                 <stringProp name="HTTPSampler.method">POST</stringProp>
                 <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
                 <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -423,12 +560,14 @@
                 <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
               </HTTPSamplerProxy>
               <hashTree>
-                <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="BeanShell PostProcessor - parsing video data" enabled="true">
-                  <boolProp name="resetInterpreter">false</boolProp>
-                  <stringProp name="parameters"></stringProp>
-                  <stringProp name="filename"></stringProp>
-                  <stringProp name="script"></stringProp>
-                </BeanShellPostProcessor>
+                <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+                  <collectionProp name="Asserion.test_strings">
+                    <stringProp name="49586">200</stringProp>
+                  </collectionProp>
+                  <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+                  <boolProp name="Assertion.assume_success">false</boolProp>
+                  <intProp name="Assertion.test_type">16</intProp>
+                </ResponseAssertion>
                 <hashTree/>
               </hashTree>
             </hashTree>
