@@ -180,22 +180,30 @@
             <boolProp name="RegexExtractor.default_empty_value">true</boolProp>
           </RegexExtractor>
           <hashTree/>
-          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor init metrics" enabled="true">
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor init metrics arrays" enabled="true">
             <stringProp name="scriptLanguage">groovy</stringProp>
             <stringProp name="parameters">${__threadNum}</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="script">	def threadBufferFillTime = [:]
+            <stringProp name="script">// Ititialization of associated arrays that store UX metrics
+// Buffer fill time for each thread
+	def threadBufferFillTime = [:]
+// Lag time for each thread	
 	def threadTotalLT = [:]
+// Download time for each thread
 	def threadTotalDT = [:]
+// Play time for each thread
 	def threadTotalPT = [:]
+// Accumulated bytes in buffer for each thread
 	def threadBytesInBuffer = [:]
+// Lag time ratio for each thread
 	def lagTimeRatio = [:]
 
 	threadTotalDT.put(args[0], (prev.getEndTime() - prev.getStartTime()));
 	threadTotalPT.put(args[0], (prev.getEndTime() - prev.getStartTime()));
 	threadBufferFillTime.put(args[0], (prev.getEndTime() - prev.getStartTime()));
 	
+// Storing associated arrays in corresponding variables.
 	vars.putObject(&quot;threadBufferFillTime&quot;,threadBufferFillTime);
 	vars.putObject(&quot;threadTotalLT&quot;,threadTotalLT);
 	vars.putObject(&quot;threadTotalPT&quot;,threadTotalPT);
@@ -305,12 +313,13 @@
               <stringProp name="cacheKey">true</stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="parameters">${__V(chunkName_${ind}_g1)} ${bufferSize} ${__threadNum}</stringProp>
-              <stringProp name="script">	threadBufferFillTime = vars.getObject(&quot;threadBufferFillTime&quot;);
+              <stringProp name="script">// Restoring associated arrays from variables
+// Buffer fill time, download time, play time, lag time and number of bytes in buffer for each thread
+	threadBufferFillTime = vars.getObject(&quot;threadBufferFillTime&quot;);
 	threadTotalDT = vars.getObject(&quot;threadTotalDT&quot;);
 	threadTotalPT = vars.getObject(&quot;threadTotalPT&quot;);
 	threadTotalLT = vars.getObject(&quot;threadTotalLT&quot;);
 	threadBytesInBuffer = vars.getObject(&quot;threadBytesInBuffer&quot;);
-
 	double dB = prev.getBytesAsLong();
 	double dT = (prev.getEndTime() - prev.getStartTime());
 	double bytesInBuffer = 0;
@@ -318,8 +327,8 @@
 
 	if(threadBytesInBuffer.containsKey(args[2]) == true)
 		bytesInBuffer = threadBytesInBuffer.get(args[2]);
-
-	if(bytesInBuffer &gt; Double.parseDouble(args[1])){
+// Buffer is filled, until bytes in buffer exceeds defined value - buffer size.
+	if(bytesInBuffer &lt; Double.parseDouble(args[1])){
 		bytesInBuffer = bytesInBuffer + dB;
 		double bufferFillTime = threadBufferFillTime.get(args[2]);
 		bufferFillTime = bufferFillTime + dT;
@@ -328,10 +337,10 @@
 		threadBytesInBuffer.put(args[2], bytesInBuffer);
 		vars.putObject(&quot;threadBytesInBuffer&quot;, threadBytesInBuffer);
 	}
-	
+//Download time - time required to download a chunk. Play time - time required for the playback of downloaded chunk, parsed from the playlist
 	double totalDT = threadTotalDT.get(args[2]) + dT;
 	double totalPT = threadTotalPT.get(args[2]) + Double.parseDouble(args[0]);
-
+// If total time for download exceeds time for playback - lag occurs
 	if(totalPT &lt; (totalDT / 1000)){
 		if (threadTotalLT.containsKey(args[2]) ==true)
 			totalLT = threadTotalLT.get(args[2]);
@@ -344,8 +353,7 @@
 	threadTotalPT.put(args[2], totalPT);
 	vars.putObject(&quot;threadTotalPT&quot;, threadTotalPT);
 	threadTotalDT.put(args[2], totalDT);
-	vars.putObject(&quot;threadTotalDT&quot;, threadTotalDT);
-</stringProp>
+	vars.putObject(&quot;threadTotalDT&quot;, threadTotalDT);</stringProp>
               <stringProp name="scriptLanguage">groovy</stringProp>
             </JSR223PostProcessor>
             <hashTree/>
