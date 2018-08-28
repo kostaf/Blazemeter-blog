@@ -65,7 +65,7 @@ public class SimpleTCPServer extends Thread {
         start();
     }
 
-    public void run()
+    public static void main(String[] args)
     {
         int packetNum = 0;
         try

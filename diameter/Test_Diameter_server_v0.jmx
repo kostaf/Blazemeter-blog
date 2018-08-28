@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2 r1790748">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="unum" elementType="Argument">
+            <stringProp name="Argument.name">unum</stringProp>
+            <stringProp name="Argument.value">5</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="itnum" elementType="Argument">
+            <stringProp name="Argument.name">itnum</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="itnum0" elementType="Argument">
+            <stringProp name="Argument.name">itnum0</stringProp>
+            <stringProp name="Argument.value">5</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Diameter server settings" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="serverIP" elementType="Argument">
+            <stringProp name="Argument.name">serverIP</stringProp>
+            <stringProp name="Argument.value">192.168.1.2</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">IP address of the diameter server</stringProp>
+          </elementProp>
+          <elementProp name="serverURL" elementType="Argument">
+            <stringProp name="Argument.name">serverURL</stringProp>
+            <stringProp name="Argument.value">aaa://lisbon.issart.com</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Diameter identity of the test server</stringProp>
+          </elementProp>
+          <elementProp name="sport" elementType="Argument">
+            <stringProp name="Argument.name">sport</stringProp>
+            <stringProp name="Argument.value">3868</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">TCP port for the communication</stringProp>
+          </elementProp>
+          <elementProp name="realm" elementType="Argument">
+            <stringProp name="Argument.name">realm</stringProp>
+            <stringProp name="Argument.value">lisbon.issart.com</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="baseApplicationID" elementType="Argument">
+            <stringProp name="Argument.name">baseApplicationID</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Diameter base application (common messages)</stringProp>
+          </elementProp>
+          <elementProp name="customApplicationID" elementType="Argument">
+            <stringProp name="Argument.name">customApplicationID</stringProp>
+            <stringProp name="Argument.value">33333</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+            <stringProp name="Argument.desc">Application imitated by the script</stringProp>
+          </elementProp>
+          <elementProp name="vendorID" elementType="Argument">
+            <stringProp name="Argument.name">vendorID</stringProp>
+            <stringProp name="Argument.value">66666</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="cmdCode" elementType="Argument">
+            <stringProp name="Argument.name">cmdCode</stringProp>
+            <stringProp name="Argument.value">686</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="exTypeCode" elementType="Argument">
+            <stringProp name="Argument.name">exTypeCode</stringProp>
+            <stringProp name="Argument.value">888</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="exDataCode" elementType="Argument">
+            <stringProp name="Argument.name">exDataCode</stringProp>
+            <stringProp name="Argument.value">999</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="client_cfg" elementType="Argument">
+            <stringProp name="Argument.name">client_cfg</stringProp>
+            <stringProp name="Argument.value">/client-jdiameter-config.xml</stringProp>
+            <stringProp name="Argument.desc">Diameter client configuration file</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="dictionary_cfg" elementType="Argument">
+            <stringProp name="Argument.name">dictionary_cfg</stringProp>
+            <stringProp name="Argument.value">/dictionary.xml</stringProp>
+            <stringProp name="Argument.desc">Dictionary file</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">${itnum}</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${unum}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1517212431000</longProp>
+        <longProp name="ThreadGroup.end_time">1517212431000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV authentication data" enabled="true">
+          <stringProp name="filename">authdata.csv</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="variableNames">authdata</stringProp>
+          <boolProp name="ignoreFirstLine">false</boolProp>
+          <stringProp name="delimiter">,</stringProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Init Diameter stack" enabled="true">
+          <stringProp name="cacheKey"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.Set;
+
+import org.jdiameter.api.*;
+import org.jdiameter.client.impl.helpers.XMLConfiguration;
+import org.jdiameter.server.impl.*;
+import org.mobicents.diameter.dictionary.*;
+
+public class TestDiameter implements EventListener&lt;Request, Answer&gt; {
+    private static final String client_cfgFile = vars.get(&quot;client_cfg&quot;);
+    private static final String dictionaryFile = vars.get(&quot;dictionary_cfg&quot;);
+    private static final String server_ip = vars.get(&quot;serverIP&quot;);
+    private static final String server_port = vars.get(&quot;sport&quot;);
+    private static final String server_URI = vars.get(&quot;serverURI&quot;);
+    private static final String realmName = vars.get(&quot;realm&quot;);
+    private static final int cmd_code = vars.get(&quot;cmdCode&quot;);
+    private static final long appID = vars.get(&quot;customApplicationID&quot;);
+    private ApplicationId authAppId = ApplicationId.createByAuthAppId(appID);
+    private static final long vendorID = vars.get(&quot;vendorID&quot;);
+    private static final int exTypeCode = vars.get(&quot;exTypeCode&quot;);
+    private static final int exDataCode = vars.get(&quot;exDataCode&quot;);
+
+    private static final int EX_TYPE_INITIAL = 0;
+    private static final int EX_TYPE_INTERMEDIATE = 1;
+    private static final int EX_TYPE_TERMINATING = 2;
+    public static final String[] TO_SEND = new String[] {&quot;Establishiing connection&quot;, &quot; &quot;, &quot;Terminating auth session&quot;};
+
+    private AvpDictionary dictionary = AvpDictionary.INSTANCE;
+    private Stack stack;
+    private SessionFactory sessionFactory;
+    private Session session;
+    private int toSendIndex = 0;
+    public boolean finished = true;
+
+    public void initStack(){
+        InputStream is = null;
+        log.info(&quot;Stack is being initialized...&quot;);
+
+        try {
+
+            dictionary.parseDictionary(this.getClass().getResourceAsStream(dictionaryFile));
+            log.info(&quot;Dictionary has been parsed&quot;);
+            this.stack = new StackImpl();
+
+            is = this.getClass().getResourceAsStream(client_cfgFile);
+            Configuration cfg = new XMLConfiguration(is);
+            sessionFactory = stack.init(cfg);
+
+            log.info(&quot;Stack configuration has been successfully loaded&quot;);
+
+            Set&lt;org.jdiameter.api.ApplicationId&gt; appIds = stack.getMetaData().getLocalPeer().getCommonApplications();
+            log.info(&quot;Diameter stack supports &quot; + appIds.size() + &quot; applications&quot;);
+
+            is.close();
+
+            Network network = stack.unwrap(Network.class);
+            network.addNetworkReqListener(new NetworkReqListener() {
+                @Override
+                public Answer processRequest(Request request) {
+                    return null;
+                }
+            }, this.authAppId);
+        }
+        catch(Exception e){
+            if (this.stack != null)
+                this.stack.destroy();
+            if (is != null){
+                try{
+                    is.close();
+                }
+                catch (Exception ex){
+                	ex.printStackTrace();
+                }
+            }
+            vars.put(&quot;operation_result&quot;,&quot;failure&quot;);
+            return;
+        }
+
+        MetaData metaData = stack.getMetaData();
+        if ((metaData.getStackType() != StackType.TYPE_SERVER)||(metaData.getMinorVersion() &lt;= 0)){
+            stack.destroy();
+            log.error(&quot;Incorrect driver&quot;);
+            vars.put(&quot;operation_result&quot;,&quot;failure&quot;);
+            return;
+        }
+        try {
+            stack.start();
+            log.info(&quot;Stack is running...&quot;);
+        }
+        catch (Exception e){
+            stack.destroy();
+            vars.put(&quot;operation_result&quot;,&quot;failure&quot;);
+            return;
+        }
+        vars.put(&quot;operation_result&quot;,&quot;success&quot;);
+        log.info(&quot;Stack has been initialized&quot;);
+    }
+
+    private void start(){
+        try{
+            try{
+                Thread.currentThread().sleep(5000);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            finished = false;
+            this.session = this.sessionFactory.getNewSession(&quot;System message&quot;+System.currentTimeMillis());
+            sendNextRequest(EX_TYPE_INITIAL);
+        }
+        catch (InternalException e){
+            e.printStackTrace();
+        }
+        catch (OverloadException e){
+            e.printStackTrace();
+        }
+        catch (RouteException e){
+            e.printStackTrace();
+        }
+        catch (IllegalDiameterStateException e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean finished(){
+        return this.finished;
+    }
+
+    private void sendNextRequest(int enumType) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+        Request req = this.session.createRequest(cmd_code, authAppId, realmName, server_URI);
+        AvpSet requestAvps = req.getAvps();
+        Avp exchangeType = requestAvps.addAvp(exTypeCode, (long) enumType, vendorID, true, false, true);
+        Avp exchangeData = requestAvps.addAvp(exDataCode, TO_SEND[toSendIndex++], true, false, false);
+
+        this.session.send(req);
+    }
+
+    @Override
+    public void receivedSuccessMessage(Request req, Answer ans){
+        if(ans.getCommandCode() != cmd_code){
+            return;
+        }
+
+        AvpSet answerAvps = ans.getAvps();
+        Avp exchangeType = answerAvps.getAvp(exTypeCode, vendorID);
+        Avp exchangeData = answerAvps.getAvp(exDataCode, vendorID);
+
+        Avp resultAvp = ans.getResultCode();
+        try {
+            if((resultAvp.getUnsigned32() == 5005)||(resultAvp.getUnsigned32() == 5004)){
+                this.session.release();
+                this.session = null;
+                finished = true;
+            }
+            switch ((int)exchangeType.getUnsigned32()){
+                case EX_TYPE_INITIAL:
+                    String ansdata = exchangeData.getUTF8String();
+                    if (ansdata.equals(TO_SEND[toSendIndex - 1]))
+                        sendNextRequest(EX_TYPE_INTERMEDIATE);
+                    break;
+                case EX_TYPE_INTERMEDIATE:
+                    ansdata = exchangeData.getUTF8String();
+                    if (ansdata.equals(TO_SEND[toSendIndex - 1]))
+                        sendNextRequest(EX_TYPE_TERMINATING);
+                    break;
+                case EX_TYPE_TERMINATING:
+                    ansdata = exchangeData.getUTF8String();
+                    if (ansdata.equals(TO_SEND[toSendIndex - 1])){
+                        this.session.release();
+                        this.session = null;
+                        finished = true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (AvpDataException e){
+            e.printStackTrace();
+        }
+        catch (InternalException e){
+            e.printStackTrace();
+        }
+        catch (IllegalDiameterStateException e){
+            e.printStackTrace();
+        }
+        catch (RouteException e){
+            e.printStackTrace();
+        }
+        catch (OverloadException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void timeoutExpired(Request request){
+
+    }
+}
+
+TestDiameter diameterClient = new TestDiameter();
+diameterClient.initStack();
+
+vars.putObject(&quot;dc&quot;, diameterClient);
+
+
+
+</stringProp>
+          <stringProp name="scriptLanguage">java</stringProp>
+        </JSR223Sampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion if init was successful" enabled="true">
+            <stringProp name="scriptLanguage">java</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="script">if (vars.get(&quot;operation_result&quot;) != &quot;failure&quot;
+	Failure == false;
+else
+	Failure == true;</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller" enabled="true">
+          <stringProp name="IfController.condition">${__BeanShell(vars.get(&quot;operation_result&quot;) == &quot;success&quot;,)}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+        </IfController>
+        <hashTree>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Send diameter authentication requests" enabled="true">
+            <stringProp name="scriptLanguage">java</stringProp>
+            <stringProp name="parameters">${authdata}</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="script">import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.Set;
+
+import org.jdiameter.api.*;
+import org.jdiameter.client.impl.helpers.XMLConfiguration;
+import org.jdiameter.server.impl.*;
+import org.mobicents.diameter.dictionary.*;
+
+	diameterClient = vars.getObject(&quot;dc&quot;);
+	diameterClient.TO_SEND[1] = authdata;
+	diameterClient.start();
+
+	while(!diameterClient.finished()){
+         try{
+             Thread.currentThread().sleep(5000);
+         }
+         catch (InterruptedException ie){
+             ie.printStackTrace();
+             vars.put(&quot;operation_result&quot;,&quot;failure&quot;);
+         }
+    }
+
+    vars.putObject(&quot;dc&quot;, diameterClient);</stringProp>
+          </JSR223Sampler>
+          <hashTree>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+              <stringProp name="scriptLanguage">java</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey"></stringProp>
+              <stringProp name="script">if (vars.get(&quot;operation_result&quot;) != &quot;failure&quot;
+	Failure == false;
+else
+	Failure == true;</stringProp>
+            </JSR223Assertion>
+            <hashTree/>
+          </hashTree>
+          <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+            <boolProp name="LoopController.continue_forever">true</boolProp>
+            <stringProp name="LoopController.loops">${itnum0}</stringProp>
+          </LoopController>
+          <hashTree>
+            <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV accounting data" enabled="true">
+              <stringProp name="filename">accdata.csv</stringProp>
+              <stringProp name="fileEncoding"></stringProp>
+              <stringProp name="variableNames">account_data</stringProp>
+              <boolProp name="ignoreFirstLine">false</boolProp>
+              <stringProp name="delimiter">,</stringProp>
+              <boolProp name="quotedData">false</boolProp>
+              <boolProp name="recycle">true</boolProp>
+              <boolProp name="stopThread">true</boolProp>
+              <stringProp name="shareMode">shareMode.all</stringProp>
+            </CSVDataSet>
+            <hashTree/>
+            <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Send Diameter accounting requests" enabled="true">
+              <stringProp name="scriptLanguage">java</stringProp>
+              <stringProp name="parameters">${account_data}</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey"></stringProp>
+              <stringProp name="script">import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.Set;
+
+import org.jdiameter.api.*;
+import org.jdiameter.client.impl.helpers.XMLConfiguration;
+import org.jdiameter.server.impl.*;
+import org.mobicents.diameter.dictionary.*;
+
+	diameterClient = vars.getObject(&quot;dc&quot;);
+	diameterClient.TO_SEND[1] = account_data;
+	diameterClient.start();
+
+	while(!diameterClient.finished()){
+         try{
+             Thread.currentThread().sleep(5000);
+         }
+         catch (InterruptedException ie){
+             ie.printStackTrace();
+             vars.put(&quot;operation_result&quot;,&quot;failure&quot;);
+         }
+    }
+
+    vars.putObject(&quot;dc&quot;, diameterClient);</stringProp>
+            </JSR223Sampler>
+            <hashTree>
+              <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey"></stringProp>
+                <stringProp name="script">if (vars.get(&quot;operation_result&quot;) != &quot;failure&quot;
+	Failure == false;
+else
+	Failure == true;</stringProp>
+              </JSR223Assertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="3.2" jmeter="3.2 r1790748">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Diameter server" enabled="true">
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="serverip" elementType="Argument">
+            <stringProp name="Argument.name">serverip</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="realm" elementType="Argument">
+            <stringProp name="Argument.name">realm</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="serverid" elementType="Argument">
+            <stringProp name="Argument.name">serverid</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="applicationID" elementType="Argument">
+            <stringProp name="Argument.name">applicationID</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="username" elementType="Argument">
+            <stringProp name="Argument.name">username</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="password" elementType="Argument">
+            <stringProp name="Argument.name">password</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="unum" elementType="Argument">
+            <stringProp name="Argument.name">unum</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="sport" elementType="Argument">
+            <stringProp name="Argument.name">sport</stringProp>
+            <stringProp name="Argument.value"></stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Diameter server settings" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="serverIP" elementType="Argument">
+            <stringProp name="Argument.name">serverIP</stringProp>
+            <stringProp name="Argument.value">192.168.1.2</stringProp>
+            <stringProp name="Argument.desc">IP address of the Diameter server</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="serverURL" elementType="Argument">
+            <stringProp name="Argument.name">serverURL</stringProp>
+            <stringProp name="Argument.value">aaa://testserver.issart.com</stringProp>
+            <stringProp name="Argument.desc">Diameter identity of the test server</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="sport" elementType="Argument">
+            <stringProp name="Argument.name">sport</stringProp>
+            <stringProp name="Argument.value">3868</stringProp>
+            <stringProp name="Argument.desc">TCP port for communication</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="realm" elementType="Argument">
+            <stringProp name="Argument.name">realm</stringProp>
+            <stringProp name="Argument.value">issart.com</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="base_application_ID" elementType="Argument">
+            <stringProp name="Argument.name">base_application_ID</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Diameter base application (common messages)</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="custom_application_ID" elementType="Argument">
+            <stringProp name="Argument.name">custom_application_ID</stringProp>
+            <stringProp name="Argument.value">12345</stringProp>
+            <stringProp name="Argument.desc">Application, imitated by script</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="vendorID" elementType="Argument">
+            <stringProp name="Argument.name">vendorID</stringProp>
+            <stringProp name="Argument.value">54321</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="commandCode" elementType="Argument">
+            <stringProp name="Argument.name">commandCode</stringProp>
+            <stringProp name="Argument.value">686</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="exchangeTypeCode" elementType="Argument">
+            <stringProp name="Argument.name">exchangeTypeCode</stringProp>
+            <stringProp name="Argument.value">888</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="exchangeDataCode" elementType="Argument">
+            <stringProp name="Argument.name">exchangeDataCode</stringProp>
+            <stringProp name="Argument.value">999</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ET_initial" elementType="Argument">
+            <stringProp name="Argument.name">ET_initial</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">start of data session exchange</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ET_intermediate" elementType="Argument">
+            <stringProp name="Argument.name">ET_intermediate</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.desc">continue data exchange</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="ET_terminating" elementType="Argument">
+            <stringProp name="Argument.name">ET_terminating</stringProp>
+            <stringProp name="Argument.value">2</stringProp>
+            <stringProp name="Argument.desc">session is terminated</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="client_cnf" elementType="Argument">
+            <stringProp name="Argument.name">client_cnf</stringProp>
+            <stringProp name="Argument.value">C:/projects/java/diameter/jdiameter-master/examples/guide1/src/main/resources/org/example/client/client-jdiameter-config.xml</stringProp>
+            <stringProp name="Argument.desc">Client configuration file</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="dictionary_cnf" elementType="Argument">
+            <stringProp name="Argument.name">dictionary_cnf</stringProp>
+            <stringProp name="Argument.value">C:/projects/java/diameter/jdiameter-master/core/mux/common/config/dictionary.xml</stringProp>
+            <stringProp name="Argument.desc">Dictionary file</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <longProp name="ThreadGroup.start_time">1513249720000</longProp>
+        <longProp name="ThreadGroup.end_time">1513249720000</longProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Users CSV Data" enabled="true">
+          <stringProp name="delimiter">,</stringProp>
+          <stringProp name="fileEncoding"></stringProp>
+          <stringProp name="filename">userslist.csv</stringProp>
+          <boolProp name="ignoreFirstLine">false</boolProp>
+          <boolProp name="quotedData">false</boolProp>
+          <boolProp name="recycle">true</boolProp>
+          <stringProp name="shareMode">shareMode.all</stringProp>
+          <boolProp name="stopThread">false</boolProp>
+          <stringProp name="variableNames"></stringProp>
+        </CSVDataSet>
+        <hashTree/>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Diameter Authentication sampler" enabled="true">
+          <stringProp name="cacheKey"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">import dk.d1.diameter.message.*;
+import dk.d1.diameter.node.*;
+import dk.d1.diameter.session.*;
+
+	Capability cap = new Capability();
+	cap.addSupportedVendor(vars.get(&quot;vendor_id&quot;));
+	cap.addAuthApp(ProtocolConstants.DIAMETER_APPLICATION_EAP);
+
+	try{
+		NodeSettings ns = new NodeSettings(vars.get(&quot;localurl&quot;), vars.get(&quot;domain_id&quot;), cap, vars.get(&quot;lport&quot;), vars.get(&quot;prodname&quot;), vars.get(&quot;fversion&quot;));
+
+		try{
+			NodeManager nm = new NodeManager(ns);
+			try{
+				nm.start();
+				try{
+					MessageHeader mh = new MessageHeader();
+					mh.setError(false);
+					mh.setProxiable(false);
+					mh.setRequest(true);
+					mh.setRetransmit(false);
+					Message request = new Message(mh);
+
+					request.hdr.application_id = ProtocolConstants.DI_AUTH_REQUEST_TYPE;
+					request.hdr.command_code = ProtocolConstants.DIAMETER_APPLICATION_EAP;
+					request.add(new AVP_UTF8String(ProtocolConstants.DI_USER_NAME,vars.get(&quot;uname&quot;)));
+					request.add(new AVP_UTF8String(ProtocolConstants.DI_USER_PASSWORD,vars.get(&quot;upassword&quot;)));
+
+					Peer dServer = new Peer(vars.get(&quot;serverurl&quot;), vars.get(&quot;sport&quot;));
+					ConnectionKey connKey = new ConnectionKey();
+
+					try{
+						nm.sendRequest(request, dServer);
+
+						Message response = new Message();
+						response.hdr.setRequest(false);
+						ns.handleAnswer(response, connKey);
+						vars.put(&quot;resp_result&quot;,response.isError());
+					}
+					catch(NotARequestException narex){
+						vars.put(&quot;resp_result&quot;,response.isError());
+						System.out.println(&quot;Invalid request format!&quot;);
+					}
+					
+				}
+				
+			}
+			catch{
+				
+			}
+		}
+		catch{
+			
+		}
+	}
+	catch {
+		
+	}
+</stringProp>
+          <stringProp name="scriptLanguage">java</stringProp>
+        </JSR223Sampler>
+        <hashTree>
+          <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Diameter Auth assertion" enabled="true">
+            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="script"></stringProp>
+            <stringProp name="scriptLanguage">java</stringProp>
+          </JSR223Assertion>
+          <hashTree/>
+        </hashTree>
+        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">true</boolProp>
+          <stringProp name="LoopController.loops">${itnum}</stringProp>
+        </LoopController>
+        <hashTree>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Diameter accounting sampler" enabled="true">
+            <stringProp name="scriptLanguage">java</stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="cacheKey"></stringProp>
+            <stringProp name="script"></stringProp>
+          </JSR223Sampler>
+          <hashTree>
+            <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Diameter acc assertion" enabled="true">
+              <stringProp name="scriptLanguage">java</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey"></stringProp>
+              <stringProp name="script"></stringProp>
+            </JSR223Assertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+      </hashTree>
+    </hashTree>
+    <WorkBench guiclass="WorkBenchGui" testclass="WorkBench" testname="WorkBench" enabled="true">
+      <boolProp name="WorkBench.save">true</boolProp>
+    </WorkBench>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
