@@ -111,21 +111,6 @@
         <boolProp name="CookieManager.clearEachIteration">true</boolProp>
       </CookieManager>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Evaluate timer&apos;s values" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="deviation" elementType="Argument">
-            <stringProp name="Argument.name">deviation</stringProp>
-            <stringProp name="Argument.value">${__javaScript(Math.round((${maxWait}-${minWait})/2),)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="offset" elementType="Argument">
-            <stringProp name="Argument.name">offset</stringProp>
-            <stringProp name="Argument.value">${__javaScript(Math.round((${maxWait}+${minWait})/2),)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-        </collectionProp>
-      </Arguments>
-      <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
