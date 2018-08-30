@@ -57,6 +57,11 @@
             <stringProp name="Argument.value">1000</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="bytesInBuffer" elementType="Argument">
+            <stringProp name="Argument.name">bytesInBuffer</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -111,16 +116,42 @@
         <boolProp name="CookieManager.clearEachIteration">true</boolProp>
       </CookieManager>
       <hashTree/>
-      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="Evaluate timer&apos;s values" enabled="true">
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User experience metrics" enabled="true">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="deviation" elementType="Argument">
-            <stringProp name="Argument.name">deviation</stringProp>
-            <stringProp name="Argument.value">${__javaScript(Math.round((${maxWait}-${minWait})/2),)}</stringProp>
+          <elementProp name="bufferFillTime" elementType="Argument">
+            <stringProp name="Argument.name">bufferFillTime</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Time for filling buffer with media chunks</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="offset" elementType="Argument">
-            <stringProp name="Argument.name">offset</stringProp>
-            <stringProp name="Argument.value">${__javaScript(Math.round((${maxWait}+${minWait})/2),)}</stringProp>
+          <elementProp name="totalDT" elementType="Argument">
+            <stringProp name="Argument.name">totalDT</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Time spent for downloading of media chunks</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="totalPT" elementType="Argument">
+            <stringProp name="Argument.name">totalPT</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Time required to play downloaded chunks</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="totalLT" elementType="Argument">
+            <stringProp name="Argument.name">totalLT</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Total lag time occured during playback of a media file.</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="totalPTLT" elementType="Argument">
+            <stringProp name="Argument.name">totalPTLT</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Real time, required for the playback, including lags.</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="lagTimeRatio" elementType="Argument">
+            <stringProp name="Argument.name">lagTimeRatio</stringProp>
+            <stringProp name="Argument.value">0</stringProp>
+            <stringProp name="Argument.desc">Ratio of the lag time to the total playback time</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -182,34 +213,26 @@
           <hashTree/>
           <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor init metrics arrays" enabled="true">
             <stringProp name="scriptLanguage">groovy</stringProp>
-            <stringProp name="parameters">${__threadNum}</stringProp>
+            <stringProp name="parameters"></stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="script">// Ititialization of associated arrays that store UX metrics
-// Buffer fill time for each thread
-	def threadBufferFillTime = [:]
-// Lag time for each thread	
-	def threadTotalLT = [:]
-// Download time for each thread
-	def threadTotalDT = [:]
-// Play time for each thread
-	def threadTotalPT = [:]
-// Accumulated bytes in buffer for each thread
-	def threadBytesInBuffer = [:]
-// Lag time ratio for each thread
-	def lagTimeRatio = [:]
-
-	threadTotalDT.put(args[0], (prev.getEndTime() - prev.getStartTime()));
-	threadTotalPT.put(args[0], (prev.getEndTime() - prev.getStartTime()));
-	threadBufferFillTime.put(args[0], (prev.getEndTime() - prev.getStartTime()));
+// Buffer fill time for thread
+	double bufferFillTime = Long.parseLong(vars.get(&quot;bufferFillTime&quot;));
+// Download time for thread
+	double totalDT = Long.parseLong(vars.get(&quot;totalDT&quot;));
+// Play time for thread
+	double totalPT = Long.parseLong(vars.get(&quot;totalPT&quot;));
+// response time - time required to get playlist
+	double rT = (prev.getEndTime() - prev.getStartTime());
 	
-// Storing associated arrays in corresponding variables.
-	vars.putObject(&quot;threadBufferFillTime&quot;,threadBufferFillTime);
-	vars.putObject(&quot;threadTotalLT&quot;,threadTotalLT);
-	vars.putObject(&quot;threadTotalPT&quot;,threadTotalPT);
-	vars.putObject(&quot;threadTotalDT&quot;,threadTotalDT);
-	vars.putObject(&quot;threadBytesInBuffer&quot;,threadBytesInBuffer);
-	vars.putObject(&quot;lagTimeRatio&quot;, lagTimeRatio);</stringProp>
+// Storing variables.
+	vars.put(&quot;bufferFillTime&quot;,Double.toString(rT));
+	vars.put(&quot;totalPT&quot;,Double.toString(rT));
+	vars.put(&quot;totalDT&quot;,Double.toString(rT));
+	vars.put(&quot;mediaPT&quot;,Double.toString(0));
+	vars.put(&quot;mediaDT&quot;,Double.toString(0));
+</stringProp>
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
@@ -250,24 +273,21 @@
             <hashTree/>
             <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor playlist DT" enabled="true">
               <stringProp name="scriptLanguage">groovy</stringProp>
-              <stringProp name="parameters">${__threadNum}</stringProp>
+              <stringProp name="parameters"></stringProp>
               <stringProp name="filename"></stringProp>
               <stringProp name="cacheKey">true</stringProp>
-              <stringProp name="script">	threadBufferFillTime = vars.getObject(&quot;threadBufferFillTime&quot;);
-	threadTotalDT = vars.getObject(&quot;threadTotalDT&quot;);
-	threadTotalPT = vars.getObject(&quot;threadTotalPT&quot;);
+              <stringProp name="script">	double bufferFillTime = Double.parseDouble(vars.get(&quot;bufferFillTime&quot;));
+	double totalDT = Double.parseDouble(vars.get(&quot;totalDT&quot;));
+	double totalPT = Double.parseDouble(vars.get(&quot;totalPT&quot;));
 
 	double dT = (prev.getEndTime() - prev.getStartTime());
-	double totalDT = threadTotalDT.get(args[0]) + dT;
-	threadTotalDT.put(args[0], totalDT)
-	double totalPT = threadTotalPT.get(args[0]) + dT;
-	threadTotalPT.put(args[0], totalPT)
-	double bufferFillTime = threadBufferFillTime.get(args[0]) + dT;
-	threadBufferFillTime.put(args[0], bufferFillTime)
+	totalDT = totalDT + dT;
+	totalPT = totalPT + dT;
+	bufferFillTime = bufferFillTime + dT;
 
-	vars.putObject(&quot;threadBufferFillTime&quot;,threadBufferFillTime);
-	vars.putObject(&quot;threadTotalPT&quot;,threadTotalPT);
-	vars.putObject(&quot;threadTotalDT&quot;,threadTotalDT);
+	vars.put(&quot;bufferFillTime&quot;,Double.toString(bufferFillTime));
+	vars.put(&quot;totalPT&quot;,Double.toString(totalPT));
+	vars.put(&quot;totalDT&quot;,Double.toString(totalDT));
 	
 </stringProp>
             </JSR223PostProcessor>
@@ -312,63 +332,59 @@
             <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor collect UX metrics" enabled="true">
               <stringProp name="cacheKey">true</stringProp>
               <stringProp name="filename"></stringProp>
-              <stringProp name="parameters">${__V(chunkName_${ind}_g1)} ${bufferSize} ${__threadNum}</stringProp>
-              <stringProp name="script">// Restoring associated arrays from variables
-// Buffer fill time, download time, play time, lag time and number of bytes in buffer for each thread
-	threadBufferFillTime = vars.getObject(&quot;threadBufferFillTime&quot;);
-	threadTotalDT = vars.getObject(&quot;threadTotalDT&quot;);
-	threadTotalPT = vars.getObject(&quot;threadTotalPT&quot;);
-	threadTotalLT = vars.getObject(&quot;threadTotalLT&quot;);
-	threadBytesInBuffer = vars.getObject(&quot;threadBytesInBuffer&quot;);
-	double dB = prev.getBytesAsLong();
-	double dT = (prev.getEndTime() - prev.getStartTime());
-	double bytesInBuffer = 0;
-	double totalLT = 0;
+              <stringProp name="parameters">${__V(chunkName_${ind}_g1)} ${bufferSize}</stringProp>
+              <stringProp name="script">// Restoring variables: buffer fill time, download time, play time, lag time and number of bytes in buffer for thread
+	double bufferFillTime = Double.parseDouble(vars.get(&quot;bufferFillTime&quot;));
+	double totalDT = Double.parseDouble(vars.get(&quot;totalDT&quot;));
+	double totalPT = Double.parseDouble(vars.get(&quot;totalPT&quot;));
+	double totalLT = Double.parseDouble(vars.get(&quot;totalLT&quot;));
+	long bytesInBuffer = Long.parseLong(vars.get(&quot;bytesInBuffer&quot;));
+	double mediaPT = Double.parseDouble(vars.get(&quot;mediaPT&quot;));
+	double mediaDT = Double.parseDouble(vars.get(&quot;mediaDT&quot;));
 
-	if(threadBytesInBuffer.containsKey(args[2]) == true)
-		bytesInBuffer = threadBytesInBuffer.get(args[2]);
+	long dB = prev.getBytesAsLong();
+	double dT = (prev.getEndTime() - prev.getStartTime());
+	mediaPT = mediaPT + Double.parseDouble(args[0]);
 // Buffer is filled, until bytes in buffer exceeds defined value - buffer size.
-	if(bytesInBuffer &lt; Double.parseDouble(args[1])){
+	if(bytesInBuffer &lt; Long.parseLong(args[1])){
 		bytesInBuffer = bytesInBuffer + dB;
-		double bufferFillTime = threadBufferFillTime.get(args[2]);
 		bufferFillTime = bufferFillTime + dT;
-		threadBufferFillTime.put(args[2], bufferFillTime);
-		vars.putObject(&quot;threadBufferFillTime&quot;, threadBufferFillTime);
-		threadBytesInBuffer.put(args[2], bytesInBuffer);
-		vars.putObject(&quot;threadBytesInBuffer&quot;, threadBytesInBuffer);
+		if(totalLT &gt; 0)
+			totalLT = totalLT + dT;
+	}
+	else{
+		mediaDT = mediaDT + dT;
+// If total time for download exceeds time for playback - lag occurs
+		if(1000*mediaPT &lt; mediaDT){
+			totalLT = totalLT + mediaDT - 1000*mediaPT;
+			bytesInBuffer = 0;
+			mediaPT = 0;
+			mediaDT = 0;
+		}
 	}
 //Download time - time required to download a chunk. Play time - time required for the playback of downloaded chunk, parsed from the playlist
-	double totalDT = threadTotalDT.get(args[2]) + dT;
-	double totalPT = threadTotalPT.get(args[2]) + Double.parseDouble(args[0]);
-// If total time for download exceeds time for playback - lag occurs
-	if(totalPT &lt; (totalDT / 1000)){
-		if (threadTotalLT.containsKey(args[2]) ==true)
-			totalLT = threadTotalLT.get(args[2]);
-		
-		totalLT = totalLT + totalDT - 1000*totalPT;
-		threadTotalLT.put(args[2], totalLT);
-		vars.putObject(&quot;threadTotalLT&quot;, threadTotalLT);
-	}
-
-	threadTotalPT.put(args[2], totalPT);
-	vars.putObject(&quot;threadTotalPT&quot;, threadTotalPT);
-	threadTotalDT.put(args[2], totalDT);
-	vars.putObject(&quot;threadTotalDT&quot;, threadTotalDT);</stringProp>
+	totalDT = totalDT + dT;
+	totalPT = totalPT + Double.parseDouble(args[0]);
+//Saving calculated UX metrics and auxiliary variables in the corresponding variables
+	vars.put(&quot;bufferFillTime&quot;,Double.toString(bufferFillTime));
+	vars.put(&quot;totalPT&quot;,Double.toString(totalPT));
+	vars.put(&quot;totalDT&quot;,Double.toString(totalDT));
+	vars.put(&quot;totalLT&quot;,Double.toString(totalLT));
+	vars.put(&quot;bytesInBuffer&quot;,Long.toString(bytesInBuffer));
+	vars.put(&quot;mediaPT&quot;,Double.toString(mediaPT));
+	vars.put(&quot;mediaDT&quot;,Double.toString(mediaDT));
+</stringProp>
               <stringProp name="scriptLanguage">groovy</stringProp>
             </JSR223PostProcessor>
             <hashTree/>
             <JSR223Assertion guiclass="TestBeanGUI" testclass="JSR223Assertion" testname="JSR223 Assertion - no jitter" enabled="true">
               <stringProp name="cacheKey">true</stringProp>
               <stringProp name="filename"></stringProp>
-              <stringProp name="parameters">${__threadNum}</stringProp>
-              <stringProp name="script">	threadTotalDT = vars.getObject(&quot;threadTotalDT&quot;);
-	double totalDT = threadTotalDT.get(args[0]);
+              <stringProp name="parameters">${bufferSize}</stringProp>
+              <stringProp name="script">	double totalLT = Double.parseDouble(vars.get(&quot;totalLT&quot;));
+	long bytesInBuffer = Long.parseLong(vars.get(&quot;bytesInBuffer&quot;));
 
-	threadTotalPT = vars.getObject(&quot;threadTotalPT&quot;);
-	double totalPT = threadTotalPT.get(args[0]);
-
-
-	if(totalPT &lt; (totalDT / 1000))
+	if((totalLT &gt; 0)&amp;&amp;(bytesInBuffer &lt; Long.parseLong(args[0])))
 		Failure = true;
 	else
 		Failure = false;
@@ -381,17 +397,19 @@
         <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler Calculate lag time ratio and play time" enabled="true">
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
-          <stringProp name="parameters"> ${__threadNum}</stringProp>
-          <stringProp name="script">	threadTotalPT = vars.getObject(&quot;threadTotalPT&quot;);
-	threadTotalLT = vars.getObject(&quot;threadTotalLT&quot;);
-	lagTimeRatio = vars.getObject(&quot;lagTimeRatio&quot;);
-	
-	double totalPT = threadTotalPT.get(args[0]);
-	double totalLT = threadTotalLT.get(args[0]);
-
-	lagTimeRatio.put(args[0], totalLT/totalPT);
-	
-	vars.putObject(&quot;lagTimeRatio&quot;, lagTimeRatio);
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="script">// Restoring variables playtime, lag time play time with lags and lag time ratio
+	double totalPT = Double.parseDouble(vars.get(&quot;totalPT&quot;));
+	double totalLT = Double.parseDouble(vars.get(&quot;totalLT&quot;));
+	double lagTimeRatio = Double.parseDouble(vars.get(&quot;lagTimeRatio&quot;));
+	double totalPTLT = Double.parseDouble(vars.get(&quot;totalPTLT&quot;));
+// Total play time, including lags
+	totalPTLT = 1000*totalPT + totalLT;
+// Lag time ratio
+	lagTimeRatio = totalLT / totalPTLT;
+// Storing variables	
+	vars.put(&quot;lagTimeRatio&quot;,Double.toString(lagTimeRatio));
+	vars.put(&quot;totalPTLT&quot;,Double.toString(totalPTLT));
 </stringProp>
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223Sampler>
