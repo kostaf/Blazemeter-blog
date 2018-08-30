@@ -196,7 +196,7 @@
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="script">	import java.util.regex.Matcher;
 	import java.util.regex.Pattern;
-	
+//Restoring variables	
 	double bufferFillTime = Double.parseDouble(vars.get(&quot;bufferFillTime&quot;));
 	double totalDT = Double.parseDouble(vars.get(&quot;totalDT&quot;));
 	double totalPT = Double.parseDouble(vars.get(&quot;totalPT&quot;));
@@ -204,30 +204,29 @@
 	double totalPTLT = Double.parseDouble(vars.get(&quot;totalLT&quot;));
 	long bytesInBuffer = Long.parseLong(vars.get(&quot;bytesInBuffer&quot;));
 	double lagTimeRatio = Double.parseDouble(vars.get(&quot;lagTimeRatio&quot;));
-
+//We use map to store chunk file with their playback duration values
 	Map chunkMap = new HashMap();
 	Pattern responsePattern = Pattern.compile(args[1]);
-
+// Download time of the master playlist
 	double dT = (prev.getEndTime() - prev.getStartTime());
 	totalDT = dT;
 	totalPT = dT;
 	bufferFillTime = dT;
 
-	double bytesInBuffer = 0;
-	double totalLT = 0;
 	long dB = 0;
 	double mediaPT = 0;
 	double mediaDT = 0;
 	SampleResult[] sR = prev.getSubResults();
 
 	for(sR0:sR){
+//Download time of the chunk playlists
 		dT = dT+(sR0.getEndTime() - sR0.getStartTime()));
 		totalDT = totalDT+dT;
 		bufferFillTime = bufferFillTime + dT;
 
 		String strResponse = sR0.getResponseDataAsString();
+//Parsing variant playlist to extract chunk files with duration values
 		Matcher matchedString = responsePattern.matcher(strResponse);
-
 		while(matchedString.find())
 			chunkMap.put(matchedString.group(2, matchedString.group(1)));
 		
@@ -237,9 +236,10 @@
 			dB = sR2.getBytesAsLong();
 			dT = (sR2.getEndTime() - sR2.getStartTime());
 			String sampleLabel = sR2.getSampleLabel();
+//Getting chunk playback duration from the map, by chunk name
 			double chunkDuration = Double.parseDouble(chunkMap.get(sampleLabel));
 			mediaPT = mediaPT + chunkDuration;
-			// Buffer is filled, until bytes in buffer exceeds defined value - buffer size.
+// Buffer is filled, until bytes in buffer exceeds defined value - buffer size.
 			if(bytesInBuffer &lt; Long.parseLong(args[0])){
 				bytesInBuffer = bytesInBuffer + dB;
 				bufferFillTime = bufferFillTime + dT;
@@ -261,6 +261,10 @@
 			totalPT = totalPT + chunkDuration;
 		}
 	}
+// Total play time, including lags
+	totalPTLT = 1000*totalPT + totalLT;
+// Lag time ratio
+	lagTimeRatio = totalLT / totalPTLT;
 
 	vars.put(&quot;bufferFillTime&quot;,Double.toString(bufferFillTime));
 	vars.put(&quot;totalPT&quot;,Double.toString(totalPT));
@@ -269,6 +273,8 @@
 	vars.put(&quot;bytesInBuffer&quot;,Long.toString(bytesInBuffer));
 	vars.put(&quot;mediaPT&quot;,Double.toString(mediaPT));
 	vars.put(&quot;mediaDT&quot;,Double.toString(mediaDT));
+	vars.put(&quot;lagTimeRatio&quot;,Double.toString(lagTimeRatio));
+	vars.put(&quot;totalPTLT&quot;,Double.toString(totalPTLT));
 </stringProp>
           </JSR223PostProcessor>
           <hashTree/>
