@@ -28,6 +28,11 @@
             <stringProp name="Argument.value">20</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="sleepTime" elementType="Argument">
+            <stringProp name="Argument.name">sleepTime</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
         </collectionProp>
       </elementProp>
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
@@ -50,7 +55,59 @@
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
-      <hashTree/>
+      <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters">${serverURL} ${sport} ${spath} ${rtime} ${sleepTime}</stringProp>
+          <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
+import com.launchdarkly.eventsource.EventHandler;
+import com.launchdarkly.eventsource.MessageEvent;
+import java.net.URI;
+import java.util.concurrent.TimeUnit;
+
+public class SimpleEventHandler implements EventHandler {
+
+//	@Override
+	public void onOpen() throws Exception{
+		log.info(&quot;The connectionhas been opened&quot;);
+	}
+
+//	@Overide
+	public void onClosed() throws Exception{
+		log.info(&quot;The connection has been closed&quot;);
+	}
+
+//	@Override
+	public void onMessage(String Event, MessageEvent messageEvent) throws Exception{
+		log.info(messageEvent.getData());
+	}
+
+//	@Override
+	public void onComment(String comment) throws Exception{
+		log.info(comment);
+	}
+
+//	@Override
+	public void onError(Throwable t){
+		log.info(&quot;Error &quot;+t);
+	}
+}
+
+	EventHandler eH = new SimpleEventHandler();
+	String url = &quot;http://&quot;+args[0]+&quot;:&quot;+args[1]+&quot;/&quot;+args[2];
+//	log.info(url);
+	EventSource.Builder builder = new EventSource.Builder(eH, URI.create(url));
+
+	EventSource eventSource = builder.build();
+	eventSource.setReconnectionTimeMS(Integer.parseAsInteger(args[3]));
+	eventSource.start();
+	TimeUnit.Minutes.sleep(Integer.parseAsInteger(args[4]));
+	</stringProp>
+          <stringProp name="scriptLanguage">java</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+      </hashTree>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
