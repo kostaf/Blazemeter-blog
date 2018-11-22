@@ -23,13 +23,33 @@
             <stringProp name="Argument.value">memory</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="rtime" elementType="Argument">
-            <stringProp name="Argument.name">rtime</stringProp>
+          <elementProp name="reconnectionTime" elementType="Argument">
+            <stringProp name="Argument.name">reconnectionTime</stringProp>
             <stringProp name="Argument.value">20</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="sleepTime" elementType="Argument">
             <stringProp name="Argument.name">sleepTime</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="unum" elementType="Argument">
+            <stringProp name="Argument.name">unum</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="itnum" elementType="Argument">
+            <stringProp name="Argument.name">itnum</stringProp>
+            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="lengthOfWork" elementType="Argument">
+            <stringProp name="Argument.name">lengthOfWork</stringProp>
+            <stringProp name="Argument.value">1000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="messagesCount" elementType="Argument">
+            <stringProp name="Argument.name">messagesCount</stringProp>
             <stringProp name="Argument.value">10</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -47,20 +67,24 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">1</stringProp>
+          <stringProp name="LoopController.loops">${itnum}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${unum}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
-          <stringProp name="cacheKey">true</stringProp>
-          <stringProp name="filename"></stringProp>
-          <stringProp name="parameters">${serverURL} ${sport} ${spath} ${rtime} ${sleepTime}</stringProp>
-          <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
+        <RunTime guiclass="RunTimeGui" testclass="RunTime" testname="Runtime Controller" enabled="true">
+          <stringProp name="RunTime.seconds">20</stringProp>
+        </RunTime>
+        <hashTree>
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler Connect to SSE server and receive a stream" enabled="true">
+            <stringProp name="cacheKey">true</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters">${serverURL} ${sport} ${spath} ${reconnectionTime} ${sleepTime}</stringProp>
+            <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
 import com.launchdarkly.eventsource.EventHandler;
 import com.launchdarkly.eventsource.MessageEvent;
 import java.net.URI;
@@ -68,27 +92,22 @@ import java.util.concurrent.TimeUnit;
 
 public class SimpleEventHandler implements EventHandler {
 
-//	@Override
 	public void onOpen() throws Exception{
 		log.info(&quot;The connection has been opened&quot;);
 	}
 
-//	@Overide
 	public void onClosed() throws Exception{
 		log.info(&quot;The connection has been closed&quot;);
 	}
 
-//	@Override
 	public void onMessage(String Event, MessageEvent messageEvent) throws Exception{
 		log.info(messageEvent.getData());
 	}
 
-//	@Override
 	public void onComment(String comment) throws Exception{
 		log.info(comment);
 	}
 
-//	@Override
 	public void onError(Throwable t){
 		log.info(&quot;Error &quot;+t);
 	}
@@ -96,17 +115,68 @@ public class SimpleEventHandler implements EventHandler {
 
 	EventHandler eH = new SimpleEventHandler();
 	String url = &quot;http://&quot;+args[0]+&quot;:&quot;+args[1]+&quot;/&quot;+args[2];
-//	log.info(url);
+	
 	EventSource.Builder builder = new EventSource.Builder(eH, URI.create(url));
 
 	EventSource eventSource = builder.build();
 	eventSource.setReconnectionTimeMs(Integer.parseInt(args[3]));
+	props.put(&quot;eS&quot;,eventSource);
 	eventSource.start();
 	TimeUnit.MINUTES.sleep(Integer.parseInt(args[4]));
-	eventSource.stop();
 	</stringProp>
+            <stringProp name="scriptLanguage">java</stringProp>
+          </JSR223Sampler>
+          <hashTree/>
+        </hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler Disconnect from the SSE server" enabled="true">
           <stringProp name="scriptLanguage">java</stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
+import com.launchdarkly.eventsource.EventHandler;
+import com.launchdarkly.eventsource.MessageEvent;
+
+	EventSource eventSource = props.get(&quot;eS&quot;);
+	eventSource.close();
+	</stringProp>
         </JSR223Sampler>
+        <hashTree/>
+        <ResultCollector guiclass="SimpleDataWriter" testclass="ResultCollector" testname="Simple Data Writer" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>true</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+              <sentBytes>true</sentBytes>
+              <threadCounts>true</threadCounts>
+              <idleTime>true</idleTime>
+              <connectTime>true</connectTime>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
         <hashTree/>
       </hashTree>
     </hashTree>
