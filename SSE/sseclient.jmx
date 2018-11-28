@@ -8,29 +8,29 @@
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
+          <elementProp name="protocol" elementType="Argument">
+            <stringProp name="Argument.name">protocol</stringProp>
+            <stringProp name="Argument.value">https</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="serverURL" elementType="Argument">
             <stringProp name="Argument.name">serverURL</stringProp>
-            <stringProp name="Argument.value">localhost</stringProp>
+            <stringProp name="Argument.value">stream.wikimedia.org</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="sport" elementType="Argument">
             <stringProp name="Argument.name">sport</stringProp>
-            <stringProp name="Argument.value">8080</stringProp>
+            <stringProp name="Argument.value">80</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="spath" elementType="Argument">
             <stringProp name="Argument.name">spath</stringProp>
-            <stringProp name="Argument.value">memory</stringProp>
+            <stringProp name="Argument.value">v2/stream/recentchange</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="reconnectionTime" elementType="Argument">
             <stringProp name="Argument.name">reconnectionTime</stringProp>
-            <stringProp name="Argument.value">20</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="sleepTime" elementType="Argument">
-            <stringProp name="Argument.name">sleepTime</stringProp>
-            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.value">10000</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="unum" elementType="Argument">
@@ -45,11 +45,6 @@
           </elementProp>
           <elementProp name="lengthOfWork" elementType="Argument">
             <stringProp name="Argument.name">lengthOfWork</stringProp>
-            <stringProp name="Argument.value">20000</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="messagesCount" elementType="Argument">
-            <stringProp name="Argument.name">messagesCount</stringProp>
             <stringProp name="Argument.value">10</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -76,21 +71,25 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <com.blazemeter.jmeter.controller.ParallelSampler guiclass="com.blazemeter.jmeter.controller.ParallelControllerGui" testclass="com.blazemeter.jmeter.controller.ParallelSampler" testname="bzm - Parallel Controller" enabled="true">
-          <boolProp name="PARENT_SAMPLE">false</boolProp>
-        </com.blazemeter.jmeter.controller.ParallelSampler>
-        <hashTree>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler Connect to SSE server and receive a stream" enabled="true">
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="parameters">${serverURL} ${sport} ${spath} ${reconnectionTime} ${sleepTime}</stringProp>
-            <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler Connect to SSE server and receive a stream" enabled="true">
+          <stringProp name="cacheKey">true</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters">${protocol} ${serverURL} ${sport} ${spath} ${reconnectionTime} ${lengthOfWork}</stringProp>
+          <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
 import com.launchdarkly.eventsource.EventHandler;
 import com.launchdarkly.eventsource.MessageEvent;
 import java.net.URI;
+import java.io.StringReader;
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
 
 public class SimpleEventHandler implements EventHandler {
+
+	public List&lt;String&gt; respList = new ArrayList&lt;String&gt;();
 
 	public void onOpen() throws Exception{
 		log.info(&quot;The connection has been opened&quot;);
@@ -101,7 +100,7 @@ public class SimpleEventHandler implements EventHandler {
 	}
 
 	public void onMessage(String Event, MessageEvent messageEvent) throws Exception{
-		log.info(&quot;Event &quot;+messageEvent.getData());
+		respList.add(messageEvent.getData());
 	}
 
 	public void onComment(String comment) throws Exception{
@@ -114,44 +113,43 @@ public class SimpleEventHandler implements EventHandler {
 }
 
 	EventHandler eH = new SimpleEventHandler();
-	String url = &quot;http://&quot;+args[0]+&quot;:&quot;+args[1]+&quot;/&quot;+args[2];
+
+	String url = &quot;&quot;;
+	String responseList=&quot;&quot;;
+	
+	if(args[0]==&quot;&quot;)
+		url = &quot;http://&quot;+args[1];
+	else
+		url = args[0]+&quot;://&quot;+args[1];
+
+	if(Integer.parseInt(args[2])!=80)
+		url = url+&quot;:&quot;+args[2];
+	
+	log.info(&quot;Argument 2 = &quot;+args[2]);
+	
+	url = url +&quot;/&quot;+args[3];
 	
 	EventSource.Builder builder = new EventSource.Builder(eH, URI.create(url));
 
 	EventSource eventSource = builder.build();
-	eventSource.setReconnectionTimeMs(Integer.parseInt(args[3]));
-	props.put(&quot;eS&quot;,eventSource);
+	eventSource.setReconnectionTimeMs(Integer.parseInt(args[4]));
 	eventSource.start();
-	TimeUnit.MINUTES.sleep(Integer.parseInt(args[4]));
-	</stringProp>
-            <stringProp name="scriptLanguage">java</stringProp>
-          </JSR223Sampler>
-          <hashTree/>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler Disconnect from the SSE server" enabled="true">
-            <stringProp name="scriptLanguage">java</stringProp>
-            <stringProp name="parameters"></stringProp>
-            <stringProp name="filename"></stringProp>
-            <stringProp name="cacheKey">true</stringProp>
-            <stringProp name="script">import com.launchdarkly.eventsource.EventSource;
-import com.launchdarkly.eventsource.EventHandler;
-import com.launchdarkly.eventsource.MessageEvent;
-
-
-	EventSource eventSource = props.get(&quot;eS&quot;);
+	TimeUnit.SECONDS.sleep(Integer.parseInt(args[5]));
 	eventSource.close();
-	</stringProp>
-          </JSR223Sampler>
-          <hashTree>
-            <JSR223Timer guiclass="TestBeanGUI" testclass="JSR223Timer" testname="JSR223 Timer" enabled="true">
-              <stringProp name="cacheKey">true</stringProp>
-              <stringProp name="filename"></stringProp>
-              <stringProp name="parameters">${lengthOfWork}</stringProp>
-              <stringProp name="script">return(20000);</stringProp>
-              <stringProp name="scriptLanguage">groovy</stringProp>
-            </JSR223Timer>
-            <hashTree/>
-          </hashTree>
-        </hashTree>
+
+	for(String respRecord:eH.respList){
+		JsonReader jsonReader = Json.createReader(new StringReader(respRecord));
+		JsonObject jsonObject = jsonReader.readObject();
+		JsonValue title = jsonObject.getValue(&quot;/title&quot;);
+		JsonValue changeType = jsonObject.getValue(&quot;/type&quot;);
+		responseList = responseList + changeType.toString()+&quot; : &quot;+title.toString()+&quot;\n&quot;; 
+	}
+
+		SampleResult.setResponseData(responseList,&quot;866&quot;);
+</stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+        </JSR223Sampler>
+        <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
