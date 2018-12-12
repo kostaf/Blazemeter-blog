@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="4.0" jmeter="4.0 r1823414">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
-      <stringProp name="TestPlan.comments"></stringProp>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan SSE request" enabled="true">
+      <stringProp name="TestPlan.comments">Script for receiving </stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
@@ -10,12 +10,27 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="serverURL" elementType="Argument">
             <stringProp name="Argument.name">serverURL</stringProp>
-            <stringProp name="Argument.value">www.yandex.ru</stringProp>
+            <stringProp name="Argument.value">${__P(serverURL, https://stream.wikimedia.org/v2/stream/recentchange)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="rTime" elementType="Argument">
-            <stringProp name="Argument.name">rTime</stringProp>
+          <elementProp name="reconnectionTime" elementType="Argument">
+            <stringProp name="Argument.name">reconnectionTime</stringProp>
             <stringProp name="Argument.value">3000</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="sleepTime" elementType="Argument">
+            <stringProp name="Argument.name">sleepTime</stringProp>
+            <stringProp name="Argument.value">10</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="option1" elementType="Argument">
+            <stringProp name="Argument.name">option1</stringProp>
+            <stringProp name="Argument.value">/title</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="option2" elementType="Argument">
+            <stringProp name="Argument.name">option2</stringProp>
+            <stringProp name="Argument.value">/type</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -41,27 +56,38 @@
         <stringProp name="ThreadGroup.delay"></stringProp>
       </ThreadGroup>
       <hashTree>
-        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Java Request" enabled="true">
+        <JavaSampler guiclass="JavaTestSamplerGui" testclass="JavaSampler" testname="Java Request SSE request" enabled="true">
+          <stringProp name="TestPlan.comments">Connection to the notification stream</stringProp>
           <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" enabled="true">
             <collectionProp name="Arguments.arguments">
-              <elementProp name="methodTag" elementType="Argument">
-                <stringProp name="Argument.name">methodTag</stringProp>
-                <stringProp name="Argument.value">Test</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-              <elementProp name="arg1" elementType="Argument">
-                <stringProp name="Argument.name">arg1</stringProp>
+              <elementProp name="serverURL" elementType="Argument">
+                <stringProp name="Argument.name">serverURL</stringProp>
                 <stringProp name="Argument.value">${serverURL}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
-              <elementProp name="arg2" elementType="Argument">
-                <stringProp name="Argument.name">arg2</stringProp>
-                <stringProp name="Argument.value">${rTime}</stringProp>
+              <elementProp name="reconnectionTime" elementType="Argument">
+                <stringProp name="Argument.name">reconnectionTime</stringProp>
+                <stringProp name="Argument.value">${reconnectionTime}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="sleepTime" elementType="Argument">
+                <stringProp name="Argument.name">sleepTime</stringProp>
+                <stringProp name="Argument.value">${sleepTime}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="option1" elementType="Argument">
+                <stringProp name="Argument.name">option1</stringProp>
+                <stringProp name="Argument.value">${option1}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+              <elementProp name="option2" elementType="Argument">
+                <stringProp name="Argument.name">option2</stringProp>
+                <stringProp name="Argument.value">${option2}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="classname">TestJavaSampler</stringProp>
+          <stringProp name="classname">SSEJavaSampler</stringProp>
         </JavaSampler>
         <hashTree/>
         <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
